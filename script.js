@@ -647,13 +647,8 @@ const preguntas = [
     // Pregunta 101
     {
         pregunta: "¿Cuál es la sintaxis correcta en docker-compose.yml para exponer un puerto?",
-        respuestas: ["ports:
-  - '3000:3000'", "expose:
-  - 3000:3000", "publish:
-  - 3000:3000", "network:
-  - port: 3000"],
-        correcta: "ports:
-  - '3000:3000'"
+        respuestas: ["ports:\n  - '3000:3000'", "expose:\n  - 3000:3000", "publish:\n  - 3000:3000", "network:\n  - port: 3000"],
+        correcta: "ports:\n  - '3000:3000'"
     },
     // Pregunta 102
     {
@@ -844,13 +839,8 @@ const preguntas = [
     // Pregunta 133
     {
         pregunta: "¿Cuál es el formato correcto para definir variables de entorno en docker-compose.yml?",
-        respuestas: ["environment:
-  - VARIABLE=valor", "env:
-  VARIABLE: valor", "variables:
-  - VARIABLE=valor", "config:
-  VARIABLE: valor"],
-        correcta: "environment:
-  - VARIABLE=valor"
+        respuestas: ["environment:\n  - VARIABLE=valor", "env:\n  VARIABLE: valor", "variables:\n  - VARIABLE=valor", "config:\n  VARIABLE: valor"],
+        correcta: "environment:\n  - VARIABLE=valor"
     },
     // Pregunta 134
     {
