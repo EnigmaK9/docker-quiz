@@ -1094,7 +1094,7 @@ function actualizarConteo() {
             } else {
                 mostrarMensajeBurrazo();
             }
-            descargarCSVUsuario();
+            descargarResultadosPDF();
         }, 4000); // Mostrar la respuesta correcta durante 4 segundos
     } else {
         setTimeout(() => {
@@ -1141,23 +1141,107 @@ function reiniciarJuego() {
     }
 }
 
-function descargarCSVUsuario() {
+function descargarResultadosPDF() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
     const username = _usernameInput.value.trim();
-    let csvContent = "data:text/csv;charset=utf-8,";
-    csvContent += "Pregunta,Respuesta Elegida,Respuesta Correcta\n";
-    respuestasUsuario.forEach(({ pregunta, respuesta, correctaText }) => {
-        const preguntaSanitizada = pregunta.replace(/,/g, ' ').replace(/(\r\n|\n|\r)/gm, " ");
-        const respuestaSanitizada = respuesta.replace(/,/g, ' ').replace(/(\r\n|\n|\r)/gm, " ");
-        const correctaSanitizada = correctaText.replace(/,/g, ' ').replace(/(\r\n|\n|\r)/gm, " ");
-        csvContent += `${preguntaSanitizada},${respuestaSanitizada},${correctaSanitizada}\n`;
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const margin = 15;
+    const maxWidth = pageWidth - margin * 2;
+    let y = 20;
+
+    // Título
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(18);
+    doc.setTextColor(124, 58, 237);
+    doc.text('Resultados del Quiz - Docker', pageWidth / 2, y, null, null, 'center');
+    y += 10;
+
+    // Línea decorativa
+    doc.setDrawColor(124, 58, 237);
+    doc.setLineWidth(0.5);
+    doc.line(margin, y, pageWidth - margin, y);
+    y += 8;
+
+    // Usuario y puntuación
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(12);
+    doc.setTextColor(60, 60, 60);
+    doc.text(`Nombre: ${username}`, margin, y);
+    doc.text(`Puntuacion: ${correctScore} / ${totalQuestion}`, pageWidth - margin, y, null, null, 'right');
+    y += 10;
+
+    doc.setDrawColor(200, 200, 200);
+    doc.line(margin, y, pageWidth - margin, y);
+    y += 8;
+
+    doc.setFontSize(10);
+
+    respuestasUsuario.forEach(({ pregunta, respuesta, correcta, correctaText }, i) => {
+        if (y > 270) {
+            doc.addPage();
+            y = 20;
+        }
+
+        // Número de pregunta
+        doc.setFont('helvetica', 'bold');
+        doc.setTextColor(80, 80, 80);
+        doc.text(`Pregunta ${i + 1}`, margin, y);
+        y += 6;
+
+        // Icono correcto/incorrecto y pregunta
+        const icono = correcta ? 'CORRECTA' : 'INCORRECTA';
+        doc.setFont('helvetica', 'bold');
+        doc.setTextColor(correcta ? 34 : 220, correcta ? 139 : 53, correcta ? 34 : 69);
+        doc.text(`${icono}`, margin, y);
+
+        // Pregunta (ajustada al ancho)
+        doc.setFont('helvetica', 'normal');
+        doc.setTextColor(60, 60, 60);
+        const lineasPregunta = doc.splitTextToSize(pregunta, maxWidth - 5);
+        doc.text(lineasPregunta, margin + 25, y);
+        y += lineasPregunta.length * 5 + 2;
+
+        // Tu respuesta
+        doc.setFont('helvetica', 'bold');
+        doc.setTextColor(100, 100, 100);
+        doc.text('Tu respuesta: ', margin + 5, y);
+        doc.setFont('helvetica', 'normal');
+        doc.setTextColor(correcta ? 34 : 220, correcta ? 139 : 53, correcta ? 34 : 69);
+        const lineasRespuesta = doc.splitTextToSize(respuesta, maxWidth - 40);
+        doc.text(lineasRespuesta, margin + 38, y);
+        y += lineasRespuesta.length * 5 + 2;
+
+        // Respuesta correcta (solo si falló)
+        if (!correcta) {
+            doc.setFont('helvetica', 'bold');
+            doc.setTextColor(100, 100, 100);
+            doc.text('Correcta: ', margin + 5, y);
+            doc.setFont('helvetica', 'normal');
+            doc.setTextColor(34, 139, 34);
+            const lineasCorrecta = doc.splitTextToSize(correctaText, maxWidth - 38);
+            doc.text(lineasCorrecta, margin + 33, y);
+            y += lineasCorrecta.length * 5 + 2;
+        }
+
+        y += 3;
+
+        // Separador
+        doc.setDrawColor(230, 230, 230);
+        doc.setLineWidth(0.3);
+        doc.line(margin, y, pageWidth - margin, y);
+        y += 6;
     });
-    const encodedUri = encodeURI(csvContent);
-    const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
-    link.setAttribute("download", `respuestas_usuario_${username}.csv`);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+
+    // Fecha
+    const date = new Date();
+    const formattedDate = date.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    doc.setFont('helvetica', 'italic');
+    doc.setFontSize(9);
+    doc.setTextColor(150, 150, 150);
+    doc.text(`Generado el ${formattedDate}`, pageWidth / 2, 290, null, null, 'center');
+
+    doc.save(`resultados_docker_${username}.pdf`);
 }
 
 function generarDiploma() {
