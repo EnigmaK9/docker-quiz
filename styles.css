@@ -1,0 +1,140 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f2f2f2;
+    color: #000;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.container {
+    background-color: #fff;
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.quiz-title {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.quiz-score {
+    font-size: 1.2rem;
+    color: #8854C0;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.quiz-question {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.quiz-options {
+    padding: 0;
+    list-style-type: none;
+    margin-bottom: 1.5rem;
+}
+
+.quiz-options li {
+    margin-bottom: 0.5rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    background-color: #8854C0;
+    color: #fff;
+    border-radius: 0.5rem;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.quiz-options li:hover,
+.quiz-options li.selected {
+    background-color: #6c4298;
+}
+
+.quiz-options li.correct {
+    background-color: #28a745 !important;
+    color: #fff !important;
+}
+
+.result {
+    display: none;
+    font-weight: bold;
+    margin-top: 1rem;
+    text-align: center;
+}
+
+.result i {
+    background-color: #8854C0;
+    color: #fff;
+    border-radius: 50%;
+    padding: 0.5rem;
+}
+
+.btn {
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.btn-primary {
+    background-color: #8854C0;
+    border-color: #8854C0;
+}
+
+.btn-primary:hover {
+    background-color: #6c4298;
+    border-color: #6c4298;
+}
+
+/* Estilos adicionales para asegurar un archivo CSS más largo */
+.quiz-options label {
+    font-size: 1.25rem;
+    margin-bottom: 0.75rem;
+}
+
+.container {
+    max-width: 600px;
+}
+
+@media (max-width: 768px) {
+    .quiz-title {
+        font-size: 1.75rem;
+    }
+
+    .quiz-question {
+        font-size: 1.25rem;
+    }
+
+    .quiz-options label {
+        font-size: 1.1rem;
+    }
+
+    .container {
+        padding: 1.5rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .quiz-title {
+        font-size: 1.5rem;
+    }
+
+    .quiz-question {
+        font-size: 1rem;
+    }
+
+    .quiz-options label {
+        font-size: 1rem;
+    }
+
+    .container {
+        padding: 1rem;
+    }
+}
