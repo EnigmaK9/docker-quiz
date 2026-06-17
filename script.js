@@ -1001,6 +1001,9 @@ function listenersEventos() {
     _playAgainBtn.addEventListener('click', reiniciarJuego);
     document.addEventListener('keydown', manejarTeclado);
     _startQuizBtn.addEventListener('click', startQuiz);
+    _usernameInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') startQuiz();
+    });
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -1051,7 +1054,7 @@ function manejarTeclado(e) {
             }
             opcion.classList.add('selected');
         }
-    } else if (e.key === 'Enter') {
+    } else if (e.key === 'Enter' && !_quizContainer.classList.contains('d-none')) {
         comprobarRespuesta();
     }
 }
